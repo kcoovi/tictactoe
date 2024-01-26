@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <title>Tic Tac Toe</title>
+  </head>
+  <body>
+    <header>
+      <h1>Tic Tac Toe</h1>
+    </header>
+
+    <section id="game-section">
+      <div id="xTab" class="player-tab X active">X</div>
+      <div id="oTab" class="player-tab O">O</div>
+
+      <div id="board" class="board">
+        <!-- Game board cells will be generated dynamically -->
+      </div>
+
+      <p id="status" class="status">Game in progress</p>
+
+      <button id="resetButton" onclick="resetGame()">Reset Game</button>
+
+      <p id="author-info">
+        By <a href="YOUR_LINK_HERE" target="_blank">Kevin Coovi</a>
+      </p>
+    </section>
+
+    <script src="js/tictactoe.js"></script>
+  </body>
+</html>
