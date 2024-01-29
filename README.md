@@ -23,7 +23,7 @@ This project provides a web-based Tic Tac Toe game with a clean and responsive u
 
 ## Installation
 
-No special installation is required. Simply clone the project or download  [game file](Standalone Game/tictactoe.html)  to your local machine.
+No special installation is required. Simply clone the project to your local machine or play the game directly [here](https://kcoovi.github.io/tictactoe/).
 
 ```bash
 git clone https://github.com/kcoovi/tictactoe.git
@@ -31,7 +31,7 @@ git clone https://github.com/kcoovi/tictactoe.git
 
 ## How to Play
 
-1. Open the [Game file](https://github.com/kcoovi/tictactoe/blob/1ea6eeb8729420aad07f95608c687736286b6135/Standalone%20Game/tictactoe.html) in a web browser.
+1. Open [the game](https://kcoovi.github.io/tictactoe/) in a web browser.
 2. Two players take turns clicking on the cells of the game board to place their respective marks (X or O).
 3. The game automatically detects a win or a tie and displays a victory message.
 4. Use the "Reset Game" button to start a new game.
