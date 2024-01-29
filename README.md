@@ -23,7 +23,7 @@ This project provides a web-based Tic Tac Toe game with a clean and responsive u
 
 ## Installation
 
-No special installation is required. Simply clone the project to your local machine or play the game directly [here](https://kcoovi.github.io/tictactoe/).
+No special installation is required. Simply clone the project to your local machine and open the `index.html` file or play the game directly [here](https://kcoovi.github.io/tictactoe/).
 
 ```bash
 git clone https://github.com/kcoovi/tictactoe.git
