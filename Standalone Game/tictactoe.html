@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tic Tac Toe</title>
+  </head>
+  <body>
+    <header>
+      <h1>Tic Tac Toe</h1>
+    </header>
+
+    <section id="game-section">
+      <div id="xTab" class="player-tab X active">X</div>
+      <div id="oTab" class="player-tab O">O</div>
+
+      <div id="board" class="board">
+        <!-- Game board cells will be generated dynamically -->
+      </div>
+
+      <p id="status" class="status">Game in progress</p>
+
+      <button id="resetButton" onclick="resetGame()">Reset Game</button>
+
+      <p id="author-info">
+        By <a href="YOUR_LINK_HERE" target="_blank">Kevin Coovi</a>
+      </p>
+    </section>
+
+    <!-- Styling -->
+    <style>
+      /* Global styles */
+      body {
+        font-family: "Arial", sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background-color: #f5f5f5;
+      }
+
+      header {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      /* Add these styles for the player tabs */
+      #xTab,
+      #oTab {
+        margin: 0 auto;
+      }
+
+      .player-tab {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 2em;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .player-tab.active {
+        background-color: #eee;
+      }
+
+      .player-tab.X {
+        color: #2b96dd; /* Blue color for X */
+      }
+
+      .player-tab.O {
+        color: #e74c3c; /* Red color for O */
+      }
+
+      /* Add these styles for the victory message */
+      #status {
+        text-align: center; /* Center the game in progress message */
+        margin-top: 20px;
+        font-size: 1.2em;
+      }
+
+      .victory-message {
+        text-align: center; /* Center the victory message */
+        margin: 20px auto; /* Center the victory message vertically and horizontally */
+        font-size: 1.5em;
+        font-weight: bold;
+        display: block; /* Ensure the victory message takes full width */
+      }
+
+      /* Add these styles for the author information */
+      #author-info {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 1em;
+      }
+
+      #author-info a {
+        color: #3498db; /* Set the link color */
+      }
+
+      /* Game board styles */
+      .board {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .cell {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 80px;
+        height: 80px;
+        background-color: white;
+        border: 2px solid #ddd;
+        cursor: pointer;
+        font-size: 1.5em;
+        font-weight: bold;
+        transition: background-color 0.3s;
+      }
+
+      .cell:hover {
+        background-color: #eee;
+      }
+
+      /* Status styles */
+      .status {
+        margin-top: 20px;
+        font-size: 1.2em;
+        text-align: center; /* Center the game in progress message */
+      }
+
+      /* Reset button styles */
+      #resetButton {
+        margin: 20px auto; /* Center the reset button horizontally */
+        padding: 10px 20px;
+        font-size: 1em;
+        background-color: #2ecc71; /* Green color for the reset button */
+        color: white;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        display: block; /* Ensure it takes the full width */
+      }
+
+      #resetButton:hover {
+        background-color: #27ae60; /* Darker green on hover */
+      }
+    </style>
+
+    <!-- Script -->
+
+    <script>
+      // Define game variables
+      var currentPlayer = "X";
+      var gameBoard = ["", "", "", "", "", "", "", "", ""];
+      var gameActive = true;
+
+      // Function to handle cell click
+      function handleCellClick(index) {
+        if (gameBoard[index] === "" && gameActive) {
+          gameBoard[index] = currentPlayer;
+          updateGameBoard();
+          checkWinner();
+          togglePlayer();
+        }
+      }
+
+      // Function to update the game board UI
+      function updateGameBoard() {
+        var cells = document.querySelectorAll(".cell");
+        cells.forEach(function (cell, index) {
+          cell.textContent = gameBoard[index];
+
+          // Add X and O classes for styling
+          cell.classList.remove("X", "O");
+          if (gameBoard[index] === "X") {
+            cell.classList.add("X");
+            cell.style.color = "#2b96dd"; // Set blue color for X
+          } else if (gameBoard[index] === "O") {
+            cell.classList.add("O");
+            cell.style.color = "#e74c3c"; // Set red color for O
+          }
+        });
+
+        updatePlayerTurnTab();
+      }
+
+      // Function to update the player turn tab
+      function updatePlayerTurnTab() {
+        var xTab = document.getElementById("xTab");
+        var oTab = document.getElementById("oTab");
+
+        if (currentPlayer === "X") {
+          xTab.classList.add("active");
+          oTab.classList.remove("active");
+        } else {
+          xTab.classList.remove("active");
+          oTab.classList.add("active");
+        }
+
+        // Update the tab text to "X" or "O"
+        xTab.textContent = "X";
+        oTab.textContent = "O";
+      }
+
+      // Function to check for a winner or a tie
+      function checkWinner() {
+        var winPatterns = [
+          [0, 1, 2],
+          [3, 4, 5],
+          [6, 7, 8],
+          [0, 3, 6],
+          [1, 4, 7],
+          [2, 5, 8],
+          [0, 4, 8],
+          [2, 4, 6],
+        ];
+
+        for (var i = 0; i < winPatterns.length; i++) {
+          var pattern = winPatterns[i];
+          var a = pattern[0],
+            b = pattern[1],
+            c = pattern[2];
+
+          if (
+            gameBoard[a] &&
+            gameBoard[a] === gameBoard[b] &&
+            gameBoard[a] === gameBoard[c]
+          ) {
+            document.getElementById("status").textContent = "Game Over";
+            displayVictoryMessage(currentPlayer + " wins!");
+            gameActive = false;
+            return;
+          }
+        }
+
+        if (!gameBoard.includes("")) {
+          document.getElementById("status").textContent = "Game Over";
+          displayVictoryMessage("It's a tie!");
+          gameActive = false;
+        }
+      }
+
+      // Function to display a victory message
+      function displayVictoryMessage(message) {
+        var victoryMessage = document.createElement("p");
+        victoryMessage.textContent = message;
+        victoryMessage.classList.add("victory-message");
+
+        // Remove existing victory message if any
+        var existingMessage = document.querySelector(".victory-message");
+        if (existingMessage) {
+          existingMessage.remove();
+        }
+
+        document.getElementById("board").appendChild(victoryMessage);
+      }
+
+      // Function to toggle players (X and O)
+      function togglePlayer() {
+        currentPlayer = currentPlayer === "X" ? "O" : "X";
+        document.getElementById("status").textContent = gameActive
+          ? currentPlayer + "'s Turn"
+          : "Game Over";
+        updatePlayerTurnTab(); // Add this line to update the player turn tab immediately
+      }
+
+      // Function to reset the game
+      function resetGame() {
+        currentPlayer = "X";
+        gameBoard = ["", "", "", "", "", "", "", "", ""];
+        gameActive = true;
+
+        // Remove the victory message element from the DOM
+        var victoryMessage = document.querySelector(".victory-message");
+        if (victoryMessage) {
+          victoryMessage.remove();
+        }
+
+        // Update the player turn tab to show the initial player
+        updatePlayerTurnTab();
+
+        document.getElementById("status").textContent = gameActive
+          ? "Game in progress"
+          : "Game Over";
+        updateGameBoard();
+      }
+
+      // Generate the initial game board
+      document.addEventListener("DOMContentLoaded", function () {
+        var boardContainer = document.getElementById("board");
+
+        for (var i = 0; i < 9; i++) {
+          var cell = document.createElement("div");
+          cell.classList.add("cell");
+
+          // Use closure to capture the current value of i
+          cell.addEventListener(
+            "click",
+            (function (index) {
+              return function () {
+                handleCellClick(index);
+              };
+            })(i)
+          );
+
+          boardContainer?.appendChild(cell);
+        }
+
+        // Highlight the initial player (X) when the game starts
+        updatePlayerTurnTab();
+      });
+    </script>
+  </body>
+</html>
